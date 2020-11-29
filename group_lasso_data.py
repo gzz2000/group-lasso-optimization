@@ -7,8 +7,8 @@ np.random.seed(seed)
 n = 512
 m = 256
 A = np.random.randn(m, n)
-k = round(m * 0.1)
-l = 4
+k = round(n * 0.1)
+l = 2
 p = np.random.permutation(n)[:k]
 u = np.zeros((n, l))
 u[p, :] = np.random.randn(k, l)
