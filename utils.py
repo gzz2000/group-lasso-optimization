@@ -39,3 +39,6 @@ def parse_iters(s, solver=None):
         ret.append((int(match.groupdict()['iterc']),
                     float(match.groupdict()['objv'])))
     return ret
+
+def provide(solver, **opts):
+    return lambda *args: solver(*args, opts=opts)

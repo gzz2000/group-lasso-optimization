@@ -8,7 +8,7 @@ plot_curve = True
 def test_solver(solver, kw):
     from group_lasso_data import n, m, l, x0, A, b, mu, u
     tic = time.time_ns()
-    [obj, x, it, out] = solver(x0, A, b, mu)
+    [obj, x, it, out] = solver(x0.copy(), A, b, mu)
     toc = time.time_ns()
     time_elapsed = (toc - tic) * 10**(-9)
     err = np.linalg.norm(u - x) / np.linalg.norm(u)
