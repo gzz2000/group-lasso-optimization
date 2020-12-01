@@ -2,7 +2,7 @@ import cvxpy as cp
 import numpy as np
 import utils
 
-def solver_cvx(x0, A, b, mu, solver, opts=[]):
+def solver_cvx(x0, A, b, mu, solver, opts={}):
     m, n = A.shape
     l = b.shape[1]
     

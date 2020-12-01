@@ -4,7 +4,7 @@ from mosek.fusion import *
 import sys
 import utils
 
-def solver_mosek(x0, A, b, mu, opts=[]):
+def solver_mosek(x0, A, b, mu, opts={}):
     print('Note: for mosek, x0 is ignored')
     m, n = A.shape
     l = b.shape[1]

@@ -7,7 +7,7 @@ import pdb
 NORM_ZERO_THRESHOLD = 0.000001
 ITER = 5000
 
-def solver_SGD_primal(x0, A, b, mu, opts=[]):
+def solver_SGD_primal(x0, A, b, mu, opts={}):
     m, n = A.shape
     l = b.shape[1]
 

@@ -3,7 +3,7 @@ import numpy as np
 import time
 import utils
 
-def solver_gurobi(x0, A, b, mu, opts=[]):
+def solver_gurobi(x0, A, b, mu, opts={}):
     m, n = A.shape
     l = b.shape[1]
     
