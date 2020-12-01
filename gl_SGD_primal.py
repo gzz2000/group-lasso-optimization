@@ -1,8 +1,6 @@
-import cvxpy as cp
 import numpy as np
 import math
 import utils
-import pdb
 
 NORM_ZERO_THRESHOLD = 0.000001
 ITER = 5000
