@@ -37,7 +37,10 @@ def solver_SGD_primal(x0, A, b, mu, opts=[]):
             #         step /= 0.9
             # if step <= 1e-6:
             #     break
-            X -= step * momentum
+            if mu1 > mu:
+                X -= step * momentum
+            else:
+                X -= step * momentum / math.sqrt(max(it, 500)-499)
             objX = obj(X)
             iters.append((it0, objX))
             it0 += 1
