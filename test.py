@@ -11,7 +11,7 @@ def test_solver(solver, kw):
     [obj, x, it, out] = solver(x0, A, b, mu)
     toc = time.time_ns()
     time_elapsed = (toc - tic) * 10**(-9)
-    err = np.linalg.norm(u - x)
+    err = np.linalg.norm(u - x) / np.linalg.norm(u)
     sparsity = np.sum(np.abs(x) > 1e-5) / x.size
     print('Time:', time_elapsed)
     print('Objective:', obj)
