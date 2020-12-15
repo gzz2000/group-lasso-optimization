@@ -1,3 +1,41 @@
+新增代码：
+gl_FGD_primal
+gl_FGD_primal_line_search
+gl_ProxGD_primal
+gl_ProxGD_primal_line_search
+gl_FProxGD_primal
+gl_FProxGD_primal_line_search
+
+它们的含义请参见报告，使用说明同前。
+
+使用附带的测试工具执行所有测试：
+python3 test.py gl_FGD_primal gl_FGD_primal_line_search gl_ProxGD_primal gl_ProxGD_primal_line_search gl_FProxGD_primal gl_FProxGD_primal_line_search gl_SGD_primal gl_SGD_primal_normal_sgd gl_GD_primal gl_GD_primal_normal_gd gl_cvx gl_gurobi gl_mosek gl_gurobi_term
+
+将会输出以下信息并打出一个收敛曲线图：
+
+Solver                             Objective        Error    Time(s)    Iter    Sparsity
+-------------------------------  -----------  -----------  ---------  ------  ----------
+FGD_primal_0.000001                 0.632059  3.96615e-05   0.611005    1200   0.0996094
+FGD_primal_line_search_0.000001     0.632167  0.000309367   0.391196     445   0.507812
+ProxGD_primal                       0.632058  3.841e-05     2.03714     4500   0.0996094
+ProxGD_primal_line_search           0.632058  3.841e-05     1.90038     1154   0.0996094
+FProxGD_primal                      0.632058  3.81504e-05   0.547391    1200   0.0996094
+FProxGD_primal_line_search          0.632148  0.000153433   0.439467     415   0.320312
+SGD_primal                          0.632061  4.1901e-05    0.373724     389   0.100586
+SGD_primal_normal_sgd               0.632061  4.16583e-05   2.02958     4500   0.100586
+GD_primal_0.000001                  0.632059  3.99827e-05   0.412677     442   0.100586
+GD_primal_normal_gd_0.000001        0.632059  4.01644e-05   1.9664      4500   0.100586
+cvx(GUROBI)                         0.632058  3.84376e-05   1.91489       11   0.0996094
+cvx(MOSEK)                          0.632058  3.84812e-05   0.84515       12   0.0996094
+cvx(CVXOPT)                         0.632058  3.85192e-05   6.2912        13   0.0996094
+gurobi_SOCP                         0.632059  3.8983e-05    3.91735       12   0.0996094
+mosek_SOCP                          0.632058  3.84436e-05   0.742574      12   0.0996094
+gurobi_SOCP_term                    0.632125  7.1033e-05    0.63222       19   0.112305
+
+对以往代码的小修改：减小了SGD_primal和GD_primal的迭代步数，同时限于篇幅默认不输出对不同smoothing参数的测试，如有需要可以在代码中手动开启。
+
+（以下是第二次作业的README）
+-----
 
 代码接口：
 gl_SGD_primal             中的 solver_SGD_primal
@@ -7,32 +45,6 @@ gl_GD_primal_normal_gd  中的 solver_GD_primal_normal_gd  （这两个包含opt
 
 全部测试：
 python3 test.py gl_SGD_primal gl_SGD_primal_normal_sgd gl_GD_primal gl_GD_primal_normal_gd gl_cvx gl_gurobi gl_mosek gl_gurobi_term
-
-将会输出类似下表：
-Solver                          Objective        Error    Time(s)    Iter    Sparsity
-----------------------------  -----------  -----------  ---------  ------  ----------
-SGD_primal                       0.632061  4.1901e-05    0.415843     389   0.100586
-SGD_primal_normal_sgd            0.632061  4.15265e-05   2.89329     6000   0.100586
-GD_primal_1.0                    1.18027   0.669243      0.846554     721   1
-GD_primal_0.1                    0.71624   0.125156      1.78575     1521   1
-GD_primal_0.01                   0.640543  0.0128611     0.842794     594   1
-GD_primal_0.001                  0.632893  0.00131757    0.458795     312   0.970703
-GD_primal_0.0001                 0.632141  0.000174222   0.393339     330   0.739258
-GD_primal_0.00001                0.632067  5.36753e-05   0.391029     360   0.107422
-GD_primal_0.000001               0.632059  3.99827e-05   0.449455     442   0.100586
-GD_primal_normal_gd_1.0          1.19057   0.677749      2.91614     6000   1
-GD_primal_normal_gd_0.1          0.718793  0.129506      2.86204     6000   1
-GD_primal_normal_gd_0.01         0.640758  0.0131845     2.84202     6000   0.998047
-GD_primal_normal_gd_0.001        0.63293   0.00138779    2.86266     6000   0.979492
-GD_primal_normal_gd_0.0001       0.63214   0.000174733   2.85822     6000   0.740234
-GD_primal_normal_gd_0.00001      0.632067  5.37654e-05   2.84817     6000   0.107422
-GD_primal_normal_gd_0.000001     0.632059  4.00423e-05   2.86348     6000   0.100586
-cvx(GUROBI)                      0.632058  3.84376e-05   2.11902       11   0.0996094
-cvx(MOSEK)                       0.632058  3.84812e-05   0.85101       12   0.0996094
-cvx(CVXOPT)                      0.632058  3.85192e-05   6.88854       13   0.0996094
-gurobi_SOCP                      0.632059  3.8983e-05    4.36788       12   0.0996094
-mosek_SOCP                       0.632058  3.84436e-05   0.829506      12   0.0996094
-gurobi_SOCP_term                 0.632125  7.1033e-05    0.712308      19   0.112305
 
 软件环境版本请参见下附的以往README。
 
