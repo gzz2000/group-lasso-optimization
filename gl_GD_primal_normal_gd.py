@@ -2,7 +2,7 @@ import numpy as np
 import math
 from utils import provide
 
-ITER = 2000
+ITER = 1500
 
 def solver_GD_primal_normal_gd(x0, A, b, mu, opts={}):
     m, n = A.shape
@@ -35,10 +35,10 @@ def solver_GD_primal_normal_gd(x0, A, b, mu, opts={}):
 
     return iters[-1][1], X, len(iters), {'iters': iters}
 
-solvers = {'GD_primal_normal_gd_1.0': provide(solver_GD_primal_normal_gd, delta=1.0),
-           'GD_primal_normal_gd_0.1': provide(solver_GD_primal_normal_gd, delta=0.1),
-           'GD_primal_normal_gd_0.01': provide(solver_GD_primal_normal_gd, delta=0.01),
-           'GD_primal_normal_gd_0.001': provide(solver_GD_primal_normal_gd, delta=0.001),
-           'GD_primal_normal_gd_0.0001': provide(solver_GD_primal_normal_gd, delta=0.0001),
-           'GD_primal_normal_gd_0.00001': provide(solver_GD_primal_normal_gd, delta=0.00001),
+solvers = {# 'GD_primal_normal_gd_1.0': provide(solver_GD_primal_normal_gd, delta=1.0),
+           # 'GD_primal_normal_gd_0.1': provide(solver_GD_primal_normal_gd, delta=0.1),
+           # 'GD_primal_normal_gd_0.01': provide(solver_GD_primal_normal_gd, delta=0.01),
+           # 'GD_primal_normal_gd_0.001': provide(solver_GD_primal_normal_gd, delta=0.001),
+           # 'GD_primal_normal_gd_0.0001': provide(solver_GD_primal_normal_gd, delta=0.0001),
+           # 'GD_primal_normal_gd_0.00001': provide(solver_GD_primal_normal_gd, delta=0.00001),
            'GD_primal_normal_gd_0.000001': provide(solver_GD_primal_normal_gd, delta=0.000001)}

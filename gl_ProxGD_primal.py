@@ -2,10 +2,9 @@ import numpy as np
 import math
 import utils
 
-NORM_ZERO_THRESHOLD = 0.000001
 ITER = 1500
 
-def solver_SGD_primal_normal_sgd(x0, A, b, mu, opts={}):
+def solver_ProxGD_primal(x0, A, b, mu, opts={}):
     m, n = A.shape
     l = b.shape[1]
 
@@ -21,18 +20,15 @@ def solver_SGD_primal_normal_sgd(x0, A, b, mu, opts={}):
     for mu1 in [100 * mu, 10 * mu, mu]:
         objX = obj(X)
         for it in range(ITER):
-            sg_frob = A.T @ (A @ X - b)
+            t_step = step if mu1 > mu else step / math.sqrt(max(it, 500) - 499)
+            g_frob = A.T @ (A @ X - b)
+            X = X - t_step * g_frob
             norm_X = np.linalg.norm(X, axis=1).reshape((-1, 1))
-            sg_12norm = X / ((norm_X <= NORM_ZERO_THRESHOLD) + norm_X)
-            sg = sg_frob + mu1 * sg_12norm
-            if mu1 > mu:
-                X -= step * sg
-            else:
-                X -= step * sg / math.sqrt(max(it, 500)-499)
+            X = X * np.maximum(0, norm_X - mu1 * t_step) / ((norm_X <= mu1 * t_step * 0.1) + norm_X)
             objX = obj(X)
             iters.append((it0, objX))
             it0 += 1
 
     return iters[-1][1], X, len(iters), {'iters': iters}
 
-solvers = {'SGD_primal_normal_sgd': solver_SGD_primal_normal_sgd}
+solvers = {'ProxGD_primal': solver_ProxGD_primal}

@@ -3,13 +3,13 @@ import math
 import utils
 
 NORM_ZERO_THRESHOLD = 0.000001
-ITER = 1500
+ITER = 2000
 
 def solver_SGD_primal_normal_sgd(x0, A, b, mu, opts={}):
     m, n = A.shape
     l = b.shape[1]
 
-    def obj(X):
+    def obj(X, mu=mu):
         return 0.5 * np.linalg.norm(A @ X - b, 'fro')**2 \
             + mu * np.sum(np.linalg.norm(X, axis=1))
 
@@ -19,7 +19,7 @@ def solver_SGD_primal_normal_sgd(x0, A, b, mu, opts={}):
 
     it0 = 0
     for mu1 in [100 * mu, 10 * mu, mu]:
-        objX = obj(X)
+        objX_mu1 = obj(X, mu=mu1)
         for it in range(ITER):
             sg_frob = A.T @ (A @ X - b)
             norm_X = np.linalg.norm(X, axis=1).reshape((-1, 1))
@@ -32,7 +32,11 @@ def solver_SGD_primal_normal_sgd(x0, A, b, mu, opts={}):
             objX = obj(X)
             iters.append((it0, objX))
             it0 += 1
+            objX1_mu1 = obj(X, mu=mu1)
+            if objX1_mu1 > objX_mu1:
+                break
+            objX_mu1 = objX1_mu1
 
     return iters[-1][1], X, len(iters), {'iters': iters}
 
-solvers = {'SGD_primal_normal_sgd': solver_SGD_primal_normal_sgd}
+solvers = {'SGD_primal_normal_sgd_earlystop': solver_SGD_primal_normal_sgd}
