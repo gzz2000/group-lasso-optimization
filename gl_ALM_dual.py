@@ -2,9 +2,10 @@ import numpy as np
 from utils import stoprange
 
 MAX_ITER = 9999
-th_converge = 1e-3
+th_converge = 1e-4
+MAX_INNER_ITER = 100
 
-def solver_ADMM_dual(lambda0, A, b, mu, opts={}):
+def solver_ALM_dual(lambda0, A, b, mu, opts={}):
     m, n = A.shape
     l = b.shape[1]
 
@@ -31,22 +32,24 @@ def solver_ADMM_dual(lambda0, A, b, mu, opts={}):
     inv = np.linalg.inv(np.eye(m) + t * A @ A.T)
     v = np.zeros((n, l))
 
-    for it, report_convergence in stoprange(MAX_ITER, 1):
-        z = inv @ (t * A @ v - A @ la - b)
-        v0 = v
-        v = project(A.T @ z + la / t, mu)
+    for it, report_outer_converge in stoprange(MAX_ITER, 3):
+        for it2, report_inner_converge in stoprange(MAX_INNER_ITER, 3):
+            z = inv @ (t * A @ v - A @ la - b)
+            v0 = v
+            v = project(A.T @ z + la / t, mu)
+            inner_gap = np.linalg.norm(v - v0, 'fro')
+            if report_inner_converge(inner_gap < th_converge):
+                print(it, 'inner', it2)
+        
         la = la + t * (A.T @ z - v)
 
         iters_primal.append((it, primal_obj(-la)))
         iters_dual.append((it, dual_obj(z)))
 
-        # convergence check
-        dual_sat = np.linalg.norm(A.T @ z - v, 'fro')
-        dual_dual_sat = np.linalg.norm(A @ (v - v0), 'fro')
-        is_conv = dual_sat < th_converge and dual_dual_sat < th_converge
-        report_convergence(is_conv)
+        dual_sat = np.linalg.norm(A.T @ z - v)
+        report_outer_converge(dual_sat < th_converge)
 
     return iters_primal[-1][1], -la, len(iters_primal),\
         {'iters': iters_primal, 'iters_dual': iters_dual}
 
-solvers = {'ADMM_dual': solver_ADMM_dual}
+solvers = {'ALM_dual': solver_ALM_dual}

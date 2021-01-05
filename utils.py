@@ -42,3 +42,14 @@ def parse_iters(s, solver=None):
 
 def provide(solver, **opts):
     return lambda *args: solver(*args, opts=opts)
+
+def stoprange(max_iter, converge_count):
+    c = 0
+    def converge_info(is_converge):
+        nonlocal c
+        c = c + 1 if is_converge else 0
+        return c >= converge_count
+    
+    for i in range(max_iter):
+        yield i, converge_info
+        if c >= converge_count: break
