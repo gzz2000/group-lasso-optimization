@@ -5,7 +5,7 @@ MAX_ITER = 9999
 th_converge = 1e-4
 MAX_INNER_ITER = 100
 
-def solver_ALM_dual(lambda0, A, b, mu, opts={}):
+def solver_ALM_dual(x0, A, b, mu, opts={}):
     m, n = A.shape
     l = b.shape[1]
 
@@ -25,9 +25,9 @@ def solver_ALM_dual(lambda0, A, b, mu, opts={}):
     iters_primal = []
     iters_dual = []
 
-    la = -lambda0
+    la = -x0
     
-    t = 10   # assume constant here. need to enable EIG otherwise
+    t = opts.get('t', 10)   # assume constant here. need to enable EIG otherwise
     # dAAT, qAAT = np.linalg.eig(A @ A.T)
     inv = np.linalg.inv(np.eye(m) + t * A @ A.T)
     v = np.zeros((n, l))
@@ -53,3 +53,9 @@ def solver_ALM_dual(lambda0, A, b, mu, opts={}):
         {'iters': iters_primal, 'iters_dual': iters_dual}
 
 solvers = {'ALM_dual': solver_ALM_dual}
+
+# If you want to test the effect of tuning hyperparameter t,
+# Uncomment below and run >> python test.py gl_ALM_dual
+
+# solvers = {'ALM_dual_t_%f' % t: lambda *a, t=t: solver_ALM_dual(*a, opts={'t': t})
+#            for t in [0.5, 1, 5, 10, 50, 100, 200, 500, 1000]}
